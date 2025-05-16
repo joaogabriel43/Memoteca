@@ -1,6 +1,21 @@
 import ui from "./ui.js"
 import api from "./api.js"
 
+function RemoverEspacos(string){
+  return string.replace(/\s+/g, "")
+}
+
+const regexConteudo = /^[A-Za-z\s]{10,}$/
+const regexAutoria = /^[a-Za-Z]{3,15}$/
+
+function validarConteudo(conteudo) {
+  return regexConteudo.test(conteudo)
+}
+
+function validarAutoria(autoria) {
+  return regexAutoria.test(autoria)
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   ui.renderizarPensamentos()
 
@@ -19,6 +34,19 @@ async function manipularSubmissaoFormulario(event) {
   const conteudo = document.getElementById("pensamento-conteudo").value
   const autoria = document.getElementById("pensamento-autoria").value
   const data = document.getElementById("pensamento-data").value
+
+  const conteudoSemEspacos = RemoverEspacos(conteudo)
+  const autoriaSemEspacos = RemoverEspacos(autoria)
+
+  if (!validarConteudo(conteudoSemEspacos)) {
+    alert("Conteúdo inválido. O conteúdo deve ter pelo menos 10 caracteres.")
+    return
+  }
+
+  if (!validarAutoria(autoriaSemEspacos)) {
+    alert("Autoria inválida. A autoria deve ter entre 3 e 15 caracteres sem espaços.")
+    return
+  }
 
   if (!validarData(data)) {
     alert("Data inválida. A data deve ser menor ou igual à data atual.")
